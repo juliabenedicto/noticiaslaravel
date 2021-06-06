@@ -2,12 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AutorNoticia;
+use App\Models\CategoriaNoticia;
 use App\Models\Noticia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Intervention\Image\Facades\Image;
 
 class NoticiaController extends Controller
 {
+    // He dejado los métodos abiertos, sin autentificación
+    // En caso de querer limitar alguno, quitarlo de 'except'
+    public function __construct(){
+        $this->middleware('auth', ['except' => ['index', 'create', 'store', 'show']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +24,9 @@ class NoticiaController extends Controller
      */
     public function index()
     {
-        return view('noticias.index');
+        // Obtener todas las noticias
+        $noticias = Noticia::all(['id', 'titulo', 'contenido', 'imagen', 'autor_id', 'categoria_id']);
+        return view('noticias.index')->with(('noticias'), $noticias);
     }
 
     /**
@@ -25,7 +36,14 @@ class NoticiaController extends Controller
      */
     public function create()
     {
-        return view('noticias.create');
+        // Obtener las categorías y autores (sin modelo)
+        //$categorias = DB::table('categoria_noticias')->get()->pluck('nombre', 'id');
+        //$autores = DB::table('autor_noticias')->get()->pluck('nombre', 'id');
+
+        // Con modelo
+        $categorias = CategoriaNoticia::all(['id', 'nombre']);
+        $autores = AutorNoticia::all(['id', 'nombre']);
+        return view('noticias.create')->with(('categorias'), $categorias)->with(('autores'), $autores);
     }
 
     /**
@@ -36,13 +54,30 @@ class NoticiaController extends Controller
      */
     public function store(Request $request)
     {
+        // Validación del formuluario para crear noticias
         $data = request()->validate([
-            'titulo' => 'required|max:255'
+            'titulo' => 'required|max:255',
+            'categoria' => 'required',
+            'contenido' => 'required',
+            'autor' => 'required',
+            'imagen' => 'required|image'
         ]);
 
+        // Obtener la ruta de la arpeta del servidor dónde se almacenan las imágenes
+        $ruta_imagen = $request['imagen']->store('upload-noticias', 'public');
+
+        // Resize de la imagen (efecto fit)
+        $img = Image::make( public_path("storage/{$ruta_imagen}"))->fit(1000, 550);
+        $img->save();
+
+        // Almacenar datos introduucidos en el formulario en la bbdd
         DB::table('noticias')->insert([
-            'titulo' => $data['titulo']
-        ]);
+            'titulo' => $data['titulo'],
+            'contenido' => $data['contenido'],
+            'imagen' => $ruta_imagen,
+            'autor_id' => $data['autor'],
+            'categoria_id' => $data['categoria'],
+         ]);
 
         // Redireccionar una vez se ha hecho "submit" del formulario
         return redirect()->action('App\Http\Controllers\NoticiaController@index');
@@ -57,7 +92,7 @@ class NoticiaController extends Controller
      */
     public function show(Noticia $noticia)
     {
-        //
+        return view('noticias.show', compact('noticia'));
     }
 
     /**

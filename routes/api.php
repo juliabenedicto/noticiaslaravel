@@ -17,3 +17,18 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+// Ruta para obtener todas las noticias
+Route::get('/noticias', 'App\Http\Controllers\APIController@noticias')->name('noticias');
+// Ruta para mostrar una noticia en específico (con su id)
+Route::get('/noticia/{noticia}', 'App\Http\Controllers\APIController@show')->name('noticia.show');
+// Ruta para obtener todas las categorías
+Route::get('/categorias', 'App\Http\Controllers\APIController@categorias')->name('categorias');
+// Ruta para obtener las noticias de una categoría
+Route::get('/categoria/{categoria}', 'App\Http\Controllers\APIController@categoria')->name('categoria');
+// Ruta para obtener las noticias de un autor/a
+Route::get('/autor/{autor}', 'App\Http\Controllers\APIController@autor')->name('autor');
+
+
+

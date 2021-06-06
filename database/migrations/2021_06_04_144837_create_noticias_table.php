@@ -14,25 +14,25 @@ class CreateNoticiasTable extends Migration
     public function up()
     {
 
-        Schema::create('categoria_noticia', function (Blueprint $table) {
-            $table->bigIncrements('id');
+        Schema::create('categoria_noticias', function (Blueprint $table) {
+            $table->id();
             $table->string('nombre');
             $table->timestamps();
         });
 
-        Schema::create('autor_noticia', function (Blueprint $table) {
-            $table->bigIncrements('id');
+        Schema::create('autor_noticias', function (Blueprint $table) {
+            $table->id();
             $table->string('nombre');
             $table->timestamps();
         });
 
         Schema::create('noticias', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('titulo');
             $table->text('contenido');
             $table->string('imagen');
-            $table->foreignId('autor_id')->index('id')->on('autor_noticia')->comment('El autor que crea la noticia');
-            $table->foreignId('categoria_id')->index('id')->on('categoria_noticia')->comment('La categoría de la noticia');
+            $table->foreignId('autor_id')->index('id')->on('autor_noticias')->comment('El autor que crea la noticia');
+            $table->foreignId('categoria_id')->index('id')->on('categoria_noticias')->comment('La categoría de la noticia');
             $table->timestamps();
         });
     }

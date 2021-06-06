@@ -7,17 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class Noticia extends Model
 {
-    public function autor(){ //$noticia->autor-->nombre
-        return $this->belongsTo(Autor::class); //Pertenece a un autor
-    }
-
-    public function categorias(){
-        return $this->belongsToMany(Categoria::class); // Modelo de muchos a muchos
-    }
-
     use HasFactory;
 
-    protected $fillable = [
-        'titulo', 'contenido', 'imagen', 'autor_id', 'categoria_id'
+    // Campos que se agregan
+    public $fillable = [
+        'titulo',
+        'contenido',
+        'imagen',
+        'autor_id',
+        'categoria_id'
     ];
+
+    // Obtener el autor de la noticia vía Foreign Key
+    public function autor(){
+        return $this->belongsTo(AutorNoticia::class);
+    }
+    // Obtener la categoría de la noticia vía Foreign Key
+    public function categoria(){
+        return $this->belongsTo(CategoriaNoticia::class);
+    }
 }

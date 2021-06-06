@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\InicioController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,13 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'App\Http\Controllers\InicioController@index')->name('inicio.index');
+
 
 Route::get('/noticias', 'App\Http\Controllers\NoticiaController@index')->name('noticias.index');
 Route::get('/noticias/create', 'App\Http\Controllers\NoticiaController@create' )->name('noticias.create');
 Route::post('/noticias', 'App\Http\Controllers\NoticiaController@store' )->name('noticias.store');
+Route::get('/noticias/{noticia}', 'App\Http\Controllers\NoticiaController@show' )->name('noticias.show');
 
 
 

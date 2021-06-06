@@ -16,22 +16,29 @@
         <thead class="bg-primary text-light">
             <tr>
                 <th scole="col">Título</th>
+                <th scole="col">Autor/a</th>
                 <th scole="col">Categoría</th>
                 <th scole="col">Acciones</th>
             </tr>
         </thead>
 
+
         <tbody>
+            @foreach($noticias as $noticia)
             <tr>
-                <td>Noticia 1</td>
-                <td>Deportes</td>
+                <td>{{$noticia->titulo}}</td>
+                <td>{{$noticia->autor->nombre}}</td>
+                <td>{{$noticia->categoria->nombre}}</td>
                 <td>
+                    <a href="" class="btn btn-danger mr-1">Eliminar</a>
+                    <a href="" class="btn btn-dark mr-1">Editar</a>
+                    <a href="{{route('noticias.show', ['noticia'=>$noticia->id])}}" class="btn btn-success mr-1">Ver</a>
 
                 </td>
             </tr>
+            @endforeach
         </tbody>
     </table>
 </div>
-
 @endsection
 
