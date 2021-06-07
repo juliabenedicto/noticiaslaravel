@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Noticia;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,6 +16,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(CategoriasSeeder::class);
         $this->call(AutoresSeeder::class);
-        // \App\Models\User::factory(10)->create();
+        $this->call(NoticiasSeeder::class);
     }
 }

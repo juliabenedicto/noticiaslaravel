@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Noticia;
+use App\Models\AutorNoticia;
+use App\Models\CategoriaNoticia;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class NoticiaFactory extends Factory
@@ -21,12 +23,15 @@ class NoticiaFactory extends Factory
      */
     public function definition()
     {
+
+
         return [
-            'titulo' => $this->faker->title(),
-            'contenido' => $this->faker->text(3000),
-            'imagen' => $this->faker->word(),
-            //'autor_id'=> $this->faker->word(),
-            //'categoria_id' => $this->faker->word(),
+            'titulo' => $this->faker->sentence(),
+            'contenido' => $this->faker->text(min:1500),
+            'imagen' => $this->faker->text(),
+            'autor_id'=> \App\Models\AutorNoticia::all()->random()->id,
+            'categoria_id' => \App\Models\CategoriaNoticia::all()->random()->id,
         ];
     }
+
 }
